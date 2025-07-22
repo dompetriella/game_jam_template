@@ -7,29 +7,47 @@ extends Node
 @onready var interface_sfx: AudioStreamPlayer = %InterfaceSFX
 
 func _ready() -> void:
-	AudioMessenger.play_music.connect(_on_play_music.bind());
-	AudioMessenger.play_sfx.connect(_on_play_sfx.bind());
-	AudioMessenger.stop_music.connect(_on_stop_music);
-	AudioMessenger.toggle_music.connect(on_toggle_music_playing)
-	
-func _on_stop_music():
-	if (music.playing):
-		music.stop();	
-		
-func _on_play_music(audio: AudioStream):
-	if (music.playing):
-		music.stop();
-	music.stream = audio;
-	music.play();
+	Events.audio_play_music.connect(_on_play_music);
+	Events.audio_play_sfx.connect(_on_play_sfx);
+	Events.audio_switch_music_track.connect(_on_stop_current_music);
 
-func on_toggle_music_playing(audio: AudioStream):
-	if (music.playing):
-		music.stop();
+func _on_play_music(audio: AudioStream, fade_in: bool = false, fade_in_time: float = 2.0):
+	if music.playing:
+		music.stop()
+		music.volume_db = 0
+
+	music.stream = audio
+
+	if fade_in:
+		music.volume_db = -80
+		music.play()
+		var music_tween: Tween = get_tree().create_tween(); 
+		music_tween.tween_property(music, "volume_db", 0, fade_in_time);
 	else:
-		music.stream = audio;
-		music.play();
+		music.volume_db = 0
+		music.play()
 
-func _on_play_sfx(source: AudioSource.Source, audio: AudioStream):
+func _on_stop_current_music(fade_out: bool = false, fade_out_time: float = 2.0):
+	if not music.playing:
+		return
+
+	if fade_out:
+		var music_tween: Tween = get_tree().create_tween();
+		music_tween.tween_property(music, "volume_db", -80, fade_out_time);
+		await music_tween.finished
+	music.stop()
+	music.volume_db = 0
+	
+func _on_switch_music_track(new_music: AudioStream, fade_between_tracks: bool = false, fade_time: float = 2.0):
+	if fade_between_tracks:
+		await _on_stop_current_music(true, fade_time)
+		await get_tree().process_frame  # Optional: ensure frame gap between stop/start
+		_on_play_music(new_music, true, fade_time)
+	else:
+		_on_stop_current_music();
+		_on_play_music(new_music);
+
+func _on_play_sfx(audio: AudioStream, source: AudioSource.Source = AudioSource.Source.WORLD_SFX):
 	match (source):
 		AudioSource.Source.PLAYER_SFX:
 			player_sfx.stream = audio;

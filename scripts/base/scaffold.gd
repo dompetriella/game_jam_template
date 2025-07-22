@@ -1,31 +1,26 @@
 extends Node
 class_name Scaffold
 
-@onready var transition_player: AnimationPlayer = %TransitionPlayer
-
-const transition_names := {
-	TransitionType.Transition.FADE_IN : "fade_in",
-	TransitionType.Transition.FADE_OUT : "fade_out"
-}
-
-func _ready() -> void:
-	ScaffoldMessenger.scaffold_new_node_tree.connect(_on_scaffold_new_node_tree.bind());
-
-func _on_scaffold_new_node_tree(
-	new_node: Node,
-	transition_in: TransitionType.Transition = TransitionType.Transition.NONE,
-	transition_out: TransitionType.Transition = TransitionType.Transition.NONE
+func scaffold_new_node_tree(
+	new_scene_node: Node,
+	data_to_load: Callable = Callable(),
+	transition_on_exit_current_scene: String = Transition.TransitionType.fade_out,
+	transition_on_enter_new_scene: String = Transition.TransitionType.fade_in
 ) -> void:
 	
-	if (transition_in != TransitionType.Transition.NONE):
-		transition_player.play(transition_names[transition_in])
-		await transition_player.animation_finished;
+	var transition_animator: AnimationPlayer = Locator.get_transition().transition_player;
+	
+	transition_animator.play(transition_on_exit_current_scene);
+	await transition_animator.animation_finished;
 	
 	for child in get_children():
-		child.queue_free()
+		child.queue_free();
 
-	await get_tree().process_frame
-	add_child(new_node);
+	await get_tree().process_frame;
+
+	add_child(new_scene_node);
 	
-	if (transition_out != TransitionType.Transition.NONE):
-		transition_player.play(transition_names[transition_out])
+	if data_to_load.is_valid():
+		await data_to_load.call();
+	
+	transition_animator.play(transition_on_enter_new_scene);

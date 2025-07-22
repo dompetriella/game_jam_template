@@ -17,14 +17,20 @@ config/icon="res://assets/sprites/icon.svg"
 
 [autoload]
 
-GameMessenger="*res://globals/messengers/game_messenger.gd"
-ScaffoldMessenger="*res://globals/messengers/scaffold_messenger.gd"
-AudioMessenger="*res://globals/messengers/audio_messenger.gd"
+Events="*res://globals/events.gd"
+Locator="*res://globals/locator.gd"
 
 [display]
 
 window/size/always_on_top=true
 window/stretch/mode="canvas_items"
+
+[global_group]
+
+Player=""
+Game=""
+Transition=""
+Scaffold=""
 
 [input]
 

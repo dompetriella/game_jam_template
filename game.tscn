@@ -1,8 +1,9 @@
-[gd_scene load_steps=10 format=3 uid="uid://dbbl764uivff2"]
+[gd_scene load_steps=11 format=3 uid="uid://dbbl764uivff2"]
 
-[ext_resource type="Script" uid="uid://dhn6w7armvs76" path="res://scripts/base/scaffold.gd" id="1_pyidc"]
-[ext_resource type="Script" uid="uid://bkvvhf2ncfnhx" path="res://scripts/base/audio.gd" id="1_vvh5c"]
-[ext_resource type="PackedScene" uid="uid://l6xve34c75ym" path="res://scenes/menus/title_menu/title_menu.tscn" id="2_pyidc"]
+[ext_resource type="Script" uid="uid://clx0dmilxwyth" path="res://scripts/base/transition.gd" id="1_fc0e3"]
+[ext_resource type="Script" uid="uid://bkvvhf2ncfnhx" path="res://scripts/base/audio.gd" id="1_feb5d"]
+[ext_resource type="Script" uid="uid://dhn6w7armvs76" path="res://scripts/base/scaffold.gd" id="2_fc0e3"]
+[ext_resource type="PackedScene" uid="uid://l6xve34c75ym" path="res://scenes/menus/title_menu/title_menu.tscn" id="3_7jktm"]
 
 [sub_resource type="Animation" id="Animation_28aoi"]
 resource_name = "Fade"
@@ -12,7 +13,7 @@ length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("ColorRect:color")
+tracks/0/path = NodePath("TransitionMask:color")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -27,7 +28,7 @@ resource_name = "default"
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("ColorRect:color")
+tracks/0/path = NodePath("TransitionMask:color")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -43,7 +44,7 @@ length = 0.5
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("ColorRect:color")
+tracks/0/path = NodePath("TransitionMask:color")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -59,7 +60,7 @@ length = 0.5
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("ColorRect:color")
+tracks/0/path = NodePath("TransitionMask:color")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -78,10 +79,47 @@ _data = {
 &"fade_out": SubResource("Animation_jnlp7")
 }
 
-[node name="Root" type="Node"]
+[node name="Game" type="Node" groups=["Game"]]
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+layer = 0
+
+[node name="Transition" type="Control" parent="CanvasLayer" groups=["Transition"]]
+z_index = 99
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_fc0e3")
+
+[node name="TransitionMask" type="ColorRect" parent="CanvasLayer/Transition"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0)
+
+[node name="TransitionPlayer" type="AnimationPlayer" parent="CanvasLayer/Transition"]
+unique_name_in_owner = true
+libraries = {
+&"": SubResource("AnimationLibrary_jnlp7")
+}
+autoplay = "default"
+
+[node name="UI" type="Control" parent="CanvasLayer"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
 
 [node name="Audio" type="Node" parent="."]
-script = ExtResource("1_vvh5c")
+script = ExtResource("1_feb5d")
 
 [node name="PlayerSFX" type="AudioStreamPlayer" parent="Audio"]
 unique_name_in_owner = true
@@ -98,33 +136,7 @@ unique_name_in_owner = true
 [node name="InterfaceSFX" type="AudioStreamPlayer" parent="Audio"]
 unique_name_in_owner = true
 
-[node name="Transition" type="Control" parent="."]
-z_index = 99
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
+[node name="Scaffold" type="Node" parent="." groups=["Scaffold"]]
+script = ExtResource("2_fc0e3")
 
-[node name="ColorRect" type="ColorRect" parent="Transition"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-color = Color(0, 0, 0, 0)
-
-[node name="TransitionPlayer" type="AnimationPlayer" parent="Transition"]
-unique_name_in_owner = true
-libraries = {
-&"": SubResource("AnimationLibrary_jnlp7")
-}
-autoplay = "default"
-
-[node name="Scaffold" type="Node" parent="."]
-script = ExtResource("1_pyidc")
-
-[node name="TitleMenu" parent="Scaffold" instance=ExtResource("2_pyidc")]
+[node name="TitleMenu" parent="Scaffold" instance=ExtResource("3_7jktm")]

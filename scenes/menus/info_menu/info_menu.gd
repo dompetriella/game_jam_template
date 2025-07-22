@@ -1,7 +1,8 @@
 extends Control
-var title_menu = load("uid://l6xve34c75ym");
+class_name InfoMenu
+
+var title_menu: PackedScene = load("uid://l6xve34c75ym");
 
 func _on_return_button_pressed() -> void:
-	ScaffoldMessenger.scaffold_new_node_tree.emit(title_menu.instantiate(), TransitionType.Transition.FADE_OUT, TransitionType.Transition.FADE_IN);
-
-	AudioMessenger.stop_music.emit();
+	var title_menu_instance: TitleMenu = title_menu.instantiate();
+	Locator.get_scaffold().scaffold_new_node_tree(title_menu_instance);

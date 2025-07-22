@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://cbp88s7ly7d5m"]
+[gd_scene load_steps=10 format=3 uid="uid://cbp88s7ly7d5m"]
 
 [ext_resource type="Texture2D" uid="uid://cxfjo726csrd1" path="res://themes/default_background.tres" id="1_dej7k"]
 [ext_resource type="Script" uid="uid://d32jsj6tcwys6" path="res://scenes/menus/info_menu/info_menu.gd" id="1_ltdji"]
@@ -9,7 +9,6 @@
 [ext_resource type="AudioStream" uid="uid://dfmdugeo8daw3" path="res://assets/audio/sfx/enemy_sfx.ogg" id="6_bcj7a"]
 [ext_resource type="AudioStream" uid="uid://xbc4rhh4pfp" path="res://assets/audio/sfx/player_sfx.ogg" id="7_hd1ax"]
 [ext_resource type="AudioStream" uid="uid://cjv26khofqb1o" path="res://assets/audio/sfx/interface_sfx.ogg" id="8_rsmkl"]
-[ext_resource type="AudioStream" uid="uid://b15bhxr4h3bkx" path="res://assets/audio/music/default_music.mp3" id="9_7ao7d"]
 
 [node name="InfoMenu" type="Control"]
 layout_mode = 3
@@ -77,12 +76,6 @@ position = Vector2(445, 517)
 label_text = "UI SFX"
 audio_source = 3
 sound_effect = ExtResource("8_rsmkl")
-
-[node name="ToggleMusicBumper" parent="Bumpers" instance=ExtResource("5_ompqs")]
-position = Vector2(976, 145)
-label_text = "Toggle Music"
-audio_source = 4
-sound_effect = ExtResource("9_7ao7d")
 
 [node name="Player" parent="." instance=ExtResource("4_tjxmo")]
 position = Vector2(579, 299)

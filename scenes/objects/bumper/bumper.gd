@@ -11,7 +11,4 @@ func _ready() -> void:
 
 func _on_area_2d_body_entered(body: Node2D) -> void:
 	if (body is Player):
-		if (audio_source == AudioSource.Source.MUSIC):
-			AudioMessenger.toggle_music.emit(sound_effect);
-		else:
-			AudioMessenger.play_sfx.emit(audio_source, sound_effect);
+			Events.Audio.play_sfx(sound_effect, audio_source);
