@@ -7,9 +7,9 @@ extends Node
 @onready var interface_sfx: AudioStreamPlayer = %InterfaceSFX
 
 func _ready() -> void:
-	Events.audio_play_music.connect(_on_play_music);
-	Events.audio_play_sfx.connect(_on_play_sfx);
-	Events.audio_switch_music_track.connect(_on_stop_current_music);
+	AudioEvents.play_music.connect(_on_play_music);
+	AudioEvents.play_sfx.connect(_on_play_sfx);
+	AudioEvents.switch_music_track.connect(_on_stop_current_music);
 
 func _on_play_music(audio: AudioStream, fade_in: bool = false, fade_in_time: float = 2.0):
 	if music.playing:

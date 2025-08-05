@@ -5,12 +5,14 @@ func scaffold_new_node_tree(
 	new_scene_node: Node,
 	data_to_load: Callable = Callable(),
 	transition_on_exit_current_scene: String = Transition.TransitionType.fade_out,
-	transition_on_enter_new_scene: String = Transition.TransitionType.fade_in
+	transition_on_enter_new_scene: String = Transition.TransitionType.fade_in,
+	transition_speed_factor: float = 1
 ) -> void:
-	
+
+	TransitionEvents.transition_started.emit();	
 	var transition_animator: AnimationPlayer = Locator.get_transition().transition_player;
-	
-	transition_animator.play(transition_on_exit_current_scene);
+	transition_animator.play(transition_on_exit_current_scene, -1, transition_speed_factor);
+
 	await transition_animator.animation_finished;
 	
 	for child in get_children():
@@ -23,4 +25,6 @@ func scaffold_new_node_tree(
 	if data_to_load.is_valid():
 		await data_to_load.call();
 	
-	transition_animator.play(transition_on_enter_new_scene);
+	transition_animator.play(transition_on_enter_new_scene, -1, transition_speed_factor);
+	await transition_animator.animation_finished;
+	TransitionEvents.transition_ended.emit();

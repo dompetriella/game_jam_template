@@ -17,12 +17,14 @@ config/icon="res://assets/sprites/icon.svg"
 
 [autoload]
 
-Events="*res://globals/events.gd"
 Locator="*res://globals/locator.gd"
+AudioEvents="*res://globals/events/audio_events.gd"
+BumperEvents="*res://globals/events/bumper_events.gd"
+TransitionEvents="*res://globals/events/transition_events.gd"
+UiEvents="*res://globals/events/ui_events.gd"
 
 [display]
 
-window/size/always_on_top=true
 window/stretch/mode="canvas_items"
 
 [global_group]
