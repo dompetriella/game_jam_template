@@ -42,7 +42,11 @@ metadata/_custom_type_script = "uid://bq6j2krjjyfcn"
 script = ExtResource("6_qdyt2")
 metadata/_custom_type_script = "uid://bq6j2krjjyfcn"
 
-[node name="CurrentStateLabel" type="Label" parent="."]
+[node name="Debug" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+
+[node name="CurrentStateLabel" type="Label" parent="Debug"]
 offset_left = -32.0
 offset_top = -65.0
 offset_right = 30.0
